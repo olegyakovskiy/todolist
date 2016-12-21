@@ -7,7 +7,7 @@ app.use(cors());
 app.use(bodyParser());
 
 var mongoose = require("mongoose");
-mongoose.connect('mongodb://localhost/librarian');
+mongoose.connect('mongodb://localhost/todolist');
 
 
 var Task = mongoose.model('Task', {name: String});
