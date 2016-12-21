@@ -1,0 +1,31 @@
+<header class="w3-container w3-light-grey w3-padding-16">
+    <h3>{{title}}</h3>
+</header>
+
+<ul class="w3-ul">
+    <li ng-repeat="book in books" class="w3-padding-16">
+        {{book.name}}
+
+        <span ng-click="removeBook($index)" style="cursor:pointer;" class="w3-right w3-margin-right">
+            x
+        </span>
+
+    </li>
+</ul>
+
+<form name="addBookForm"  >
+    <div class="w3-container w3-light-grey w3-padding-16">
+        <div class="w3-row w3-margin-top" style="max-width:330px;">
+            <div class="w3-col s10">
+                <input type="text" name="newBook" ng-model="newBook" class="w3-input w3-border w3-padding" required
+                       />
+            </div>
+            <div class="w3-col s2">
+                <button ng-click="saveBook()"
+                        ng-disabled="addBookForm.newBook.$invalid"
+                        class="w3-btn w3-padding w3-green">Add Book</button>
+            </div>
+        </div>
+        <p class="w3-padding-left w3-text-red">{{errorText}}</p>
+    </div>
+</form>
