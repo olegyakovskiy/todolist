@@ -1,10 +1,10 @@
-var library = angular.module("library", ["ngRoute"]);
+var library = angular.module("todolist", ["ngRoute"]);
 
 library.config(function($routeProvider) {
     $routeProvider
         .when("/home",  {templateUrl : "view/overview.html", controller: "overviewCtrl"})
-        .when("/books",  {templateUrl : "view/books.html", controller: "bookCtrl"})
-        .when("/labels", {templateUrl : "view/labels.html", controller: "labelCtrl"})
+        .when("/tasks",  {templateUrl : "view/tasks.html", controller: "taskCtrl"})
+        .when("/settings", {templateUrl : "view/settings.html", controller: "settingsCtrl"})
         .otherwise({redirectTo: '/home'})
 });
 
@@ -12,56 +12,56 @@ library.controller("overviewCtrl", function ($scope) {
     $scope.title = "Welcome";
 });
 
-library.controller("labelCtrl", function ($scope) {
-    $scope.title = "Labels";
+library.controller("settingsCtrl", function ($scope) {
+    $scope.title = "Settings";
 });
 
-library.controller("bookCtrl", function ($scope, $http) {
-    $scope.title = "Books";
+library.controller("taskCtrl", function ($scope, $http) {
+    $scope.title = "Tasks";
 
     var serverUrl = "http://localhost:3000";
 
-    $scope.saveBook = function () {
+    $scope.saveTask = function () {
         $scope.errorText = "";
-        var newBook = $scope.newBook.trim();
-        var exists = containsBook(newBook);
+        var newTask = $scope.newTask.trim();
+        var exists = containsTask(newTask);
         if (exists == true) {
-            $scope.errorText = "Book with this name already exists";
+            $scope.errorText = "Task with this name already exists";
         }
         else {
             $scope.errorText = "";
-            $http.post(serverUrl + "/add", {name: newBook}).then(function () {
-                loadBooks();
+            $http.post(serverUrl + "/add", {name: newTask}).then(function () {
+                loadTasks();
             });
-            $scope.newBook = "";
+            $scope.newTask = "";
         }
     };
 
-    $scope.removeBook = function (index) {
-        var bookId = $scope.books[index]._id;
-        $http.post(serverUrl + "/remove", {bookId: bookId}).then(function () {
-            loadBooks();
+    $scope.removeTask = function (index) {
+        var taskId = $scope.tasks[index]._id;
+        $http.post(serverUrl + "/remove", {taskId: taskId}).then(function () {
+            loadTasks();
         })
     };
 
-    function containsBook(bookName) {
-        var bookNameUp = bookName.toUpperCase();
-        var bookExists = false;
-        $scope.books.forEach(function (book) {
-            if (book.name.toUpperCase() == bookNameUp) {
-                bookExists = true;
+    function containsTask(name) {
+        var nameUp = name.toUpperCase();
+        var taskExists = false;
+        $scope.tasks.forEach(function (task) {
+            if (task.name.toUpperCase() == nameUp) {
+                taskExists = true;
             }
         });
-        return bookExists;
+        return taskExists;
     }
 
-    function loadBooks() {
+    function loadTasks() {
         $http.get(serverUrl).then(function (res) {
-            $scope.books = res.data;
+            $scope.tasks = (res.data === undefined) ? [] : res.data;
         });
     }
 
-    loadBooks();
+    loadTasks();
 });
 
 

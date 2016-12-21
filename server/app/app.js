@@ -10,28 +10,28 @@ var mongoose = require("mongoose");
 mongoose.connect('mongodb://localhost/librarian');
 
 
-var Book = mongoose.model('Book', {name: String});
+var Task = mongoose.model('Task', {name: String});
 
 app.get("/", function (req, res) {
-    Book.find(function (err, books) {
-        res.send(books);
+    Task.find(function (err, tasks) {
+        res.send(tasks);
     })
 });
 
 app.post("/add", function (req, res) {
     var name = req.body.name;
-    var book = new Book({name:name});
-    book.save(function (err) {
+    var task = new Task({name:name});
+    task.save(function (err) {
         res.send();
     })
 });
 
 app.post("/remove", function (req, res) {
-    var bookId = req.body.bookId;
-    Book.find({_id:bookId}, function (err, books) {
+    var taskIdId = req.body.taskId;
+    Task.find({_id:taskIdId}, function (err, tasks) {
         // TODO: validate non 1 array size
-        var book = books[0];
-        book.remove(function () {
+        var task = tasks[0];
+        task.remove(function () {
             res.send();
         });
 
